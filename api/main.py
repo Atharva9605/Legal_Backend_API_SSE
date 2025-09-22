@@ -9,10 +9,10 @@ load_dotenv()
 
 app = FastAPI(title="Legal Advisor - War Game Directive Streamer")
 
-# ✅ Enable CORS
+# Keep general CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Replace * with Lovable domain for security
+    allow_origins=["*"],  # Replace "*" with Lovable domain for stricter security
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -42,7 +42,6 @@ async def stream_post(request: Request):
             yield f"data: {chunk}\n\n"
             await asyncio.sleep(0)
 
-    # ✅ Explicit CORS headers for SSE
     return StreamingResponse(
         event_gen(),
         media_type="text/event-stream",
@@ -66,7 +65,6 @@ async def stream_get(prompt: str = None):
             yield f"data: {chunk}\n\n"
             await asyncio.sleep(0)
 
-    # ✅ Explicit CORS headers for SSE
     return StreamingResponse(
         event_gen(),
         media_type="text/event-stream",
